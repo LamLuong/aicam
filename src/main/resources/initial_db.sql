@@ -1,11 +1,12 @@
 PRAGMA foreign_keys = ON;
 
 -- Table structure for table `clients`
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `user` (
      `id` INTEGER PRIMARY KEY AUTOINCREMENT,
      `username` VARCHAR(255) NOT NULL,
      `email` VARCHAR(100) NOT NULL,
      `password` VARCHAR(255) NOT NULL
+    --  `role` VARCHAR(64) CHECK(role IN ('ADMIN', 'NORMAL')) NOT NULL default 'NORMAL'
 );
 
 -- Table structure for table `employees`
@@ -18,3 +19,4 @@ CREATE TABLE IF NOT EXISTS `camera` (
 
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
