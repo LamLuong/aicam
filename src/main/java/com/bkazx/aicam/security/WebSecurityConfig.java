@@ -13,7 +13,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.bkazx.aicam.security.jwt.AuthTokenFilter;
 import com.bkazx.aicam.security.services.UserDetailsServiceImpl;
 
 @EnableWebSecurity
@@ -39,6 +41,11 @@ class WebSecurityConfig {
   }
 
   @Bean
+  public AuthTokenFilter authenticationJwtTokenFilter() {
+    return new AuthTokenFilter();
+  }
+
+  @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
     return authConfig.getAuthenticationManager();
   }
@@ -47,12 +54,12 @@ class WebSecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
       .csrf(AbstractHttpConfigurer::disable)
-      // .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
       // .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.GET, "/**").permitAll())
       .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.GET, "/aicam/v1/cameras").authenticated())
-      .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.POST, "/aicam/v1/user/**").permitAll())
+      .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.POST, "/aicam/v1/user").permitAll())
       .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.PUT, "/aicam/v1/user/**").permitAll())
       .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.GET, "/swagger-ui.html", "/swagger-ui/**", "/api-docs/**").permitAll())
+      .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
       // .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.GET, "/lookup/**").permitAll())
       // .authorizeHttpRequests(
       //       d -> d.requestMatchers(HttpMethod.POST, "/stocks/**").hasRole(Roles.EMPLOYEE.getRole()))
