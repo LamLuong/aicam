@@ -1,22 +1,22 @@
 package com.bkazx.aicam.user;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.bkazx.aicam.exception.ValidationError;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.bkazx.aicam.dto.request.UserSignupRequestDTO;
+import com.bkazx.aicam.exception.ValidationError;
+
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class UserService {
+  @Autowired
   private final UserRepository userRepository;
-  private final PasswordEncoder passwordEncoder;
 
-  public UserService(@Autowired UserRepository userRepository) {
-      this.userRepository = userRepository;
-      passwordEncoder = new BCryptPasswordEncoder();
-  }
+  @Autowired
+  private final PasswordEncoder passwordEncoder;
 
   public User signupUser(UserSignupRequestDTO requestDTO) throws ValidationError {
     if (userRepository.existsByEmail(requestDTO.getEmail())) {
