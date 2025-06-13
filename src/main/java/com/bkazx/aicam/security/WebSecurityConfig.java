@@ -58,6 +58,7 @@ class WebSecurityConfig {
       .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.GET, "/aicam/v1/cameras").authenticated())
       .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.POST, "/aicam/v1/user").permitAll())
       .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.PUT, "/aicam/v1/user/**").permitAll())
+      .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.GET, "/ws").authenticated())
       .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.GET, "/swagger-ui.html", "/swagger-ui/**", "/api-docs/**").permitAll())
       .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
       // .authorizeHttpRequests(d -> d.requestMatchers(HttpMethod.GET, "/lookup/**").permitAll())
